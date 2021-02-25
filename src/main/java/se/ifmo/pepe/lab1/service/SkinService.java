@@ -28,10 +28,12 @@ public class SkinService {
         return new ArrayList<>(skinRepository.findAllByApproved(approved));
     }
 
+    public Skin fetchSkinById(Long id) {
+        return skinRepository.findById(id).isPresent() ? skinRepository.findById(id).get() : null;
+    }
 
     public Skin saveSkin(Skin skin) {
-        skin.setApproved(false)
-                .setDlUrl(generateDownloadLink(skin.getTitle()));
+        skin.setDlUrl(generateDownloadLink(skin.getTitle()));
         skinRepository.save(skin);
         return skin;
     }

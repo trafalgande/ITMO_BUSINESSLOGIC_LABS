@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import se.ifmo.pepe.lab1.model.CustomNotification;
 import se.ifmo.pepe.lab1.model.Skin;
 import se.ifmo.pepe.lab1.service.AuthorService;
 import se.ifmo.pepe.lab1.service.SkinService;
@@ -25,20 +26,10 @@ public class ApiController {
         this.authorService = authorService;
     }
 
-    @RequestMapping("/skins/find/all")
-    public ArrayList<Skin> findAllSkins() {
-        return skinService.fetchAllSkins();
+    @RequestMapping("/{id}/notifications")
+    public ArrayList<CustomNotification> findAllNewNotifications(@PathVariable(name = "id") Long author_id) {
+        return authorService.fetchAllNewNotificationsByAuthorId(author_id);
     }
-
-   /* @RequestMapping("/skins/find/{parameter}")
-    public void findAllSkinsByParameter(@PathVariable(name = "parameter")String parameter) {
-
-        switch (parameter) {
-            case "female" -> {
-               return skinService.fetchAllSkinsBy(parameter)
-            }
-        }
-    }*/
 
     @RequestMapping("/skins/add")
     public Skin addSkin(@RequestParam(name = "title") String title,
@@ -51,5 +42,15 @@ public class ApiController {
                 .setPrice(price != null ? price : 0)
                 .setAuthor(authorService.fetchAuthorById(authorId))
         );
+    }
+
+    @RequestMapping("/skins/find/all")
+    public ArrayList<Skin> findAllSkins() {
+        return skinService.fetchAllSkins();
+    }
+
+    @RequestMapping("/skins/buy/{skin_id}")
+    public void buySkin(@PathVariable(name = "skin_id") Long skinId){
+        //TODO
     }
 }
