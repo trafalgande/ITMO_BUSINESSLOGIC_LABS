@@ -23,6 +23,9 @@ public class SkinService {
         return new ArrayList<>(skinRepository.findAll());
     }
 
+    public void removeSkinById(Long id) {
+        skinRepository.deleteById(id);
+    }
 
     public ArrayList<Skin> fetchAllApprovedSkins(Boolean approved) {
         return new ArrayList<>(skinRepository.findAllByApproved(approved));

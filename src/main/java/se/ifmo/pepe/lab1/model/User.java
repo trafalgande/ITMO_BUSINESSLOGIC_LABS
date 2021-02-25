@@ -7,9 +7,9 @@ import java.io.Serializable;
 
 
 @Data
-@Table(name = "AUTHORS")
+@Table(name = "USERS")
 @Entity
-public class Author implements Serializable {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

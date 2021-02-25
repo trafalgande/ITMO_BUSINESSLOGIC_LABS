@@ -32,8 +32,8 @@ public class Skin implements Serializable {
     @Column(name = "tag")
     private String tag;
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     /*
     * IMPLICIT FROM SkinService.class
@@ -71,8 +71,8 @@ public class Skin implements Serializable {
         return this;
     }
 
-    public Skin setAuthor(Author author) {
-        this.author = author;
+    public Skin setUser(User user) {
+        this.user = user;
         return this;
     }
 

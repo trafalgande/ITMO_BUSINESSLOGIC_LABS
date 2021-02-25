@@ -16,8 +16,8 @@ public class CustomNotification implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "message")
     private String message;
@@ -30,8 +30,8 @@ public class CustomNotification implements Serializable {
         return this;
     }
 
-    public CustomNotification setAuthor(Author author) {
-        this.author = author;
+    public CustomNotification setUser(User user) {
+        this.user = user;
         return this;
     }
 
