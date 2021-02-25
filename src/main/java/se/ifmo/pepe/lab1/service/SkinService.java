@@ -28,6 +28,15 @@ public class SkinService {
         return new ArrayList<>(skinRepository.findAllByApproved(approved));
     }
 
+    public ArrayList<Skin> fetchAllSkinsByTag(String tag) {
+        return new ArrayList<>(skinRepository.findAllByTag(tag));
+    }
+
+    public ArrayList<Skin> fetchAllSkinsBySex(String sex) {
+        return new ArrayList<>(skinRepository.findAllBySex(sex));
+    }
+
+
     public Skin fetchSkinById(Long id) {
         return skinRepository.findById(id).isPresent() ? skinRepository.findById(id).get() : null;
     }

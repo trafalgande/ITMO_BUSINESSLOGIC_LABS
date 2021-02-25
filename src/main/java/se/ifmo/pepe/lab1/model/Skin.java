@@ -27,6 +27,10 @@ public class Skin implements Serializable {
     private String description;
     @Column(name = "price")
     private Double price;
+    @Column(name = "sex")
+    private String sex;
+    @Column(name = "tag")
+    private String tag;
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
@@ -74,6 +78,16 @@ public class Skin implements Serializable {
 
     public Skin setPrice(Double price) {
         this.price = price;
+        return this;
+    }
+
+    public Skin setSex(String sex) {
+        this.sex = sex;
+        return this;
+    }
+
+    public Skin setTag(String tag) {
+        this.tag = tag;
         return this;
     }
 }

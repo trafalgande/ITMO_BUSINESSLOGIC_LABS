@@ -35,22 +35,36 @@ public class ApiController {
     public Skin addSkin(@RequestParam(name = "title") String title,
                         @RequestParam(name = "description") String description,
                         @RequestParam(name = "price", required = false) Double price,
+                        @RequestParam(name = "sex", required = false) String sex,
+                        @RequestParam(name = "tag", required = false) String tag,
                         @RequestParam(name = "author_id") Long authorId) {
         return skinService.saveSkin(new Skin()
                 .setTitle(title)
                 .setDescription(description)
                 .setPrice(price != null ? price : 0)
+                .setSex(sex)
+                .setTag(tag)
                 .setAuthor(authorService.fetchAuthorById(authorId))
         );
     }
 
-    @RequestMapping("/skins/find/all")
-    public ArrayList<Skin> findAllSkins() {
-        return skinService.fetchAllSkins();
+    @RequestMapping("/skins/find/{by}")
+    public ArrayList<Skin> findAllSkinsBy(@PathVariable(name = "by") String by,
+                                          @RequestParam(name = "value", required = false) String value) {
+
+        switch (by) {
+            case "tag":
+                return skinService.fetchAllSkinsByTag(value);
+            case "sex":
+                return skinService.fetchAllSkinsBySex(value);
+            case "all":
+                return skinService.fetchAllSkins();
+        }
+        return null;
     }
 
     @RequestMapping("/skins/buy/{skin_id}")
-    public void buySkin(@PathVariable(name = "skin_id") Long skinId){
+    public void buySkin(@PathVariable(name = "skin_id") Long skinId) {
         //TODO
     }
 }
