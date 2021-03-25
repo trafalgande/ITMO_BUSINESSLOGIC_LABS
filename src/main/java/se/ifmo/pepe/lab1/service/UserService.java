@@ -7,6 +7,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import se.ifmo.pepe.lab1.exception.PaymentException;
+import se.ifmo.pepe.lab1.exception.SkinException;
 import se.ifmo.pepe.lab1.model.Skin;
 import se.ifmo.pepe.lab1.model.User;
 import se.ifmo.pepe.lab1.model.CustomNotification;
@@ -47,14 +48,15 @@ public class UserService {
         return notifications;
     }
 
-    public Skin purchaseSkin(Long userId, Long skinId) {
-        User buyer = userRepository.findById(userId).isPresent() ? userRepository.findById(userId).get() : null;
+    public Skin purchaseSkin(Long userId, Long skinId) throws SkinException {
+        User buyer = userRepository.findById(userId).get();
         Skin desired = skinRepository.findById(skinId).isPresent() ? skinRepository.findById(skinId).get() : null;
-        assert desired != null;
-        assert buyer != null;
+
+        if (desired == null)
+            throw new SkinException("There's no such skin");
 
         if (!desired.getApproved())
-            return null;
+            throw new SkinException("Skin is not approved yet");
 
         template.execute(transactionStatus -> {
             try {
@@ -68,7 +70,7 @@ public class UserService {
             }
             return desired;
         });
-        return null;
+        return desired;
     }
 
 }
