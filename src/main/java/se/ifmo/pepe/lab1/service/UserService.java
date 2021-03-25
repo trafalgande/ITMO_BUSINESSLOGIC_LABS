@@ -1,7 +1,12 @@
 package se.ifmo.pepe.lab1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import se.ifmo.pepe.lab1.model.Role;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -13,12 +18,16 @@ import se.ifmo.pepe.lab1.model.User;
 import se.ifmo.pepe.lab1.model.CustomNotification;
 import se.ifmo.pepe.lab1.repository.SkinRepository;
 import se.ifmo.pepe.lab1.repository.UserRepository;
+import se.ifmo.pepe.lab1.repository.RoleRepository;
 import se.ifmo.pepe.lab1.repository.NotificationRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final SkinRepository skinRepository;
@@ -26,11 +35,18 @@ public class UserService {
     private final TransactionTemplate template;
 
     @Autowired
-    public UserService(UserRepository userRepository, NotificationRepository notificationRepository, SkinRepository skinRepository, TransactionTemplate tt, PlatformTransactionManager txManager, TransactionTemplate template) {
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    public UserService(RoleRepository roleRepository,
+                       UserRepository userRepository,
+                       NotificationRepository notificationRepository,
+                       SkinRepository skinRepository,
+                       PlatformTransactionManager txManager) {
+        this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
         this.skinRepository = skinRepository;
-
         this.txManager = txManager;
         this.template = new TransactionTemplate(this.txManager);
     }
@@ -46,6 +62,36 @@ public class UserService {
             notificationRepository.save(n);
         }
         return notifications;
+    }
+
+    public boolean saveUser(User user) {
+        User userFromDB = userRepository.findByUsername(user.getUsername()).isPresent() ? userRepository.findByUsername(user.getUsername()).get() : null;
+
+        if (userFromDB != null) {
+            return false;
+        }
+
+        user.setRoles(roleRepository.findByName("ROLE_USER").isPresent() ? Collections.singleton(roleRepository.findByName("ROLE_USER").get()) : null);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return true;
+    }
+
+    public boolean deleteUser(Long userId) {
+        if (userRepository.findById(userId).isPresent()) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (userRepository.findByUsername(username).isPresent())
+            return userRepository.findByUsername(username).get();
+        else
+            throw new UsernameNotFoundException("User not found");
     }
 
     public Skin purchaseSkin(Long userId, Long skinId) throws SkinException {

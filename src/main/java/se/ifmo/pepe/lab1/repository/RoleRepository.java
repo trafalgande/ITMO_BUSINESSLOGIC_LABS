@@ -3,12 +3,12 @@ package se.ifmo.pepe.lab1.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import se.ifmo.pepe.lab1.model.User;
+import se.ifmo.pepe.lab1.model.Role;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long>, JpaRepository<User, Long> {
+public interface RoleRepository extends CrudRepository<Role, Long>, JpaRepository<Role, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<Role> findByName(String name);
 }

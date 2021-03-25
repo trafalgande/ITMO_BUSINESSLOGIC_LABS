@@ -2,6 +2,7 @@ package se.ifmo.pepe.lab1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ifmo.pepe.lab1.model.Role;
 import se.ifmo.pepe.lab1.model.Skin;
 
 @Service
@@ -30,4 +31,5 @@ public class AdminService {
         notificationService.sendNotification(skin.getUser().getId(),
                 String.format("Your skin#%d was approved! :)", skin.getId()));
     }
+
 }
