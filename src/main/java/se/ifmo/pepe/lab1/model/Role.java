@@ -23,16 +23,6 @@ public class Role implements Serializable, GrantedAuthority {
     public Role() {
     }
 
-
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    public Role(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Role setName(String name) {
         this.name = name;
         return this;

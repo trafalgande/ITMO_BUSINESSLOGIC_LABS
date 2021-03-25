@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import se.ifmo.pepe.lab1.exception.SkinException;
 import se.ifmo.pepe.lab1.model.Skin;
 import se.ifmo.pepe.lab1.service.AdminService;
 import se.ifmo.pepe.lab1.service.NotificationService;
@@ -30,7 +31,6 @@ public class AdminController {
     }
 
 
-    @ApiOperation(value = "${AdminController.findAllSkins}")
     @GetMapping("/skins")
     public ArrayList<Skin> findAllSkins(@ApiParam("username") @RequestParam(name = "u") String username,
                                         @ApiParam("password") @RequestParam(name = "p") String password,
@@ -43,7 +43,6 @@ public class AdminController {
         return null;
     }
 
-    @ApiOperation(value = "${AdminController.findSkinById}")
     @GetMapping(value = "/skin/{id}")
     public Skin findSkinById(@ApiParam("username") @RequestParam(name = "u") String username,
                              @ApiParam("password") @RequestParam(name = "p") String password,
@@ -53,12 +52,33 @@ public class AdminController {
         return null;
     }
 
-    @ApiOperation(value = "${AdminController.resolveSkinById}")
+
+    @GetMapping("/approve/{id}")
+    public HttpStatus approveSkinById(@ApiParam("id") @PathVariable(name = "id") Long skinId) throws SkinException {
+        if (adminService.approve(skinId))
+            return HttpStatus.OK;
+        else
+            return HttpStatus.BAD_REQUEST;
+    }
+
+    @GetMapping("/decline/{id}")
+    public HttpStatus declineSkinById(@ApiParam("id") @PathVariable(name = "id") Long skinId) throws SkinException {
+        if (adminService.decline(skinId))
+            return HttpStatus.OK;
+        else
+            return HttpStatus.BAD_REQUEST;
+
+    }
+
+    /***
+     * Use approveSkinById() or declineSkinById() instead
+     * */
+    @Deprecated()
     @GetMapping("/{action}/{id}")
     public HttpStatus resolveSkinById(@ApiParam("username") @RequestParam(name = "u") String username,
                                       @ApiParam("password") @RequestParam(name = "p") String password,
                                       @ApiParam("action") @PathVariable(name = "action") String action,
-                                      @ApiParam("id") @PathVariable(name = "id") Long skinId) {
+                                      @ApiParam("id") @PathVariable(name = "id") Long skinId) throws SkinException {
         if (username.equals("admin") && password.equals("admin"))
             switch (action) {
                 case "approve": {

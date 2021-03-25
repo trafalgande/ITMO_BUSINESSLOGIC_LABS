@@ -34,12 +34,6 @@ public class RegistrationController {
     }
 
 
-//    @GetMapping("/register")
-//    public String registration(Model model) {
-//        model.addAttribute("userForm", new User());
-//        return "registration";
-//    }
-
     @PostMapping("/signup")
     public HttpStatus addUser(@ApiParam("username") @RequestParam(name = "username") String username,
                               @ApiParam("password") @RequestParam(name = "password") String password) {

@@ -2,7 +2,9 @@ package se.ifmo.pepe.lab1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ifmo.pepe.lab1.model.Role;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+import se.ifmo.pepe.lab1.exception.SkinException;
 import se.ifmo.pepe.lab1.model.Skin;
 
 @Service
@@ -10,25 +12,61 @@ public class AdminService {
 
     private final SkinService skinService;
     private final NotificationService notificationService;
+    private final PlatformTransactionManager txManager;
+    private final TransactionTemplate template;
 
     @Autowired
-    public AdminService(SkinService skinService, NotificationService notificationService) {
+    public AdminService(SkinService skinService, NotificationService notificationService, PlatformTransactionManager txManager) {
         this.skinService = skinService;
         this.notificationService = notificationService;
+        this.txManager = txManager;
+        this.template = new TransactionTemplate(txManager);
     }
 
-    public void decline(Long skinId) {
-        Skin skin = skinService.fetchSkinById(skinId);
-        skinService.removeSkinById(skin.getId());
-        notificationService.sendNotification(skin.getUser().getId(),
-                String.format("Your skin#%d was declined! :(", skin.getId()));
+    public Boolean decline(Long skinId) throws SkinException {
+        Skin skinToApprove = skinService.fetchSkinById(skinId) != null ? skinService.fetchSkinById(skinId) : null;
+        if (skinToApprove == null)
+            throw new SkinException("There's no such skin, mr.Admin");
+
+        template.execute(transactionStatus -> {
+            try {
+                skinToApprove.setApproved(true);
+                Skin skin = skinService.saveSkin(skinToApprove);
+                notificationService.sendNotification(skin.getUser().getId(),
+                        String.format("Your skin#%d was declined! :(", skin.getId()));
+                return true;
+            } catch (Exception e) {
+                transactionStatus.setRollbackOnly();
+                notificationService.sendNotification(skinToApprove.getUser().getId(),
+                        "Something went wrong. Transaction has rolled back");
+                e.printStackTrace();
+            }
+            return false;
+        });
+        return false;
     }
 
-    public void approve(Long skinId) {
-        Skin skinToApprove = skinService.fetchSkinById(skinId).setApproved(true);
-       /* Skin skin = skinService.saveSkin();
-        notificationService.sendNotification(skin.getUser().getId(),
-                String.format("Your skin#%d was approved! :)", skin.getId()));*/
+    public Boolean approve(Long skinId) throws SkinException {
+        Skin skinToApprove = skinService.fetchSkinById(skinId) != null ? skinService.fetchSkinById(skinId) : null;
+        if (skinToApprove == null)
+            throw new SkinException("There's no such skin, mr.Admin");
+
+        template.execute(transactionStatus -> {
+            try {
+                skinToApprove.setApproved(true);
+                Skin skin = skinService.saveSkin(skinToApprove);
+                notificationService.sendNotification(skin.getUser().getId(),
+                        String.format("Your skin#%d was approved! :)", skin.getId()));
+                return true;
+            } catch (Exception e) {
+                transactionStatus.setRollbackOnly();
+                notificationService.sendNotification(skinToApprove.getUser().getId(),
+                        "Something went wrong. Transaction has rolled back");
+                e.printStackTrace();
+            }
+            return false;
+        });
+        return false;
     }
 
 }

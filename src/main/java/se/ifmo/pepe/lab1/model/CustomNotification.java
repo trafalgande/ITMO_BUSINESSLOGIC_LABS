@@ -25,11 +25,6 @@ public class CustomNotification implements Serializable {
     @Column(name = "is_new")
     private Boolean isNew;
 
-    public CustomNotification setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
     public CustomNotification setUser(User user) {
         this.user = user;
         return this;
