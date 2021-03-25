@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public User fetchUserById(Long id) {
-        return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : null;
+        return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : userRepository.findById(1L).get(); // if no user present -> belongs to super-user aka admin (id: 1)
     }
 
     public ArrayList<CustomNotification> fetchAllNewNotificationsByUserId(Long userId) {

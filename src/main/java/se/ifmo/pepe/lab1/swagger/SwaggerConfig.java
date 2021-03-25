@@ -33,7 +33,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("Business Logic. 1st lab")
                 .description("A. Chaika, A. Changalidi")
-                .version("1.0.0")//
+                .version("1.0.0")
                 .build();
     }
 }

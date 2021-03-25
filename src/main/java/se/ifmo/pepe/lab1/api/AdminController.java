@@ -47,7 +47,7 @@ public class AdminController {
     }
 
     @ApiOperation(value = "${AdminController.findSkinById}")
-    @GetMapping("/skin/{id}")
+    @GetMapping(value = "/skin/{id}")
     public Skin findSkinById(@ApiParam("username") @RequestParam(name = "u") String username,
                              @ApiParam("password") @RequestParam(name = "p") String password,
                              @ApiParam("id") @PathVariable(name = "id") Long skinId) {
