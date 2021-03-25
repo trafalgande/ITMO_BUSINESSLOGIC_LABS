@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.pepe.lab1.exception.SkinException;
 import se.ifmo.pepe.lab1.model.CustomNotification;
@@ -29,20 +30,22 @@ public class ApiController {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}/notifications")
-    public ArrayList<CustomNotification> findAllNewNotifications(
-            @ApiParam("id") @PathVariable(name = "id") Long userId) {
-        return userService.fetchAllNewNotificationsByUserId(userId);
+    @GetMapping("/notifications")
+    public ResponseEntity<ArrayList<CustomNotification>> findAllNewNotifications(
+            Authentication authentication) {
+        Long userId = userService.fetchUserByName(authentication.getName()).getId();
+        return new ResponseEntity<>(userService.fetchAllNewNotificationsByUserId(userId), HttpStatus.OK);
     }
 
 
     @PostMapping("/skins/add")
     public ResponseEntity<Skin> addSkin(@ApiParam("title") @RequestParam(name = "title") String title,
-                        @ApiParam("description") @RequestParam(name = "description") String description,
-                        @ApiParam("price") @RequestParam(name = "price", required = false) Double price,
-                        @ApiParam("sex") @RequestParam(name = "sex", required = false) String sex,
-                        @ApiParam("tag") @RequestParam(name = "tag", required = false) String tag,
-                        @ApiParam("user_id") @RequestParam(name = "user_id") Long userId) {
+                                        @ApiParam("description") @RequestParam(name = "description") String description,
+                                        @ApiParam("price") @RequestParam(name = "price", required = false) Double price,
+                                        @ApiParam("sex") @RequestParam(name = "sex", required = false) String sex,
+                                        @ApiParam("tag") @RequestParam(name = "tag", required = false) String tag,
+                                        Authentication authentication) {
+        Long userId = userService.fetchUserByName(authentication.getName()).getId();
         return new ResponseEntity<>(skinService.saveSkin(new Skin()
                 .setTitle(title)
                 .setDescription(description)
@@ -56,7 +59,7 @@ public class ApiController {
 
     @GetMapping("/skins/find/{by}")
     public ResponseEntity<ArrayList<Skin>> findAllSkinsBy(@ApiParam("by") @PathVariable(name = "by") String by,
-                                          @ApiParam("value") @RequestParam(name = "value", required = false) String value) {
+                                                          @ApiParam("value") @RequestParam(name = "value", required = false) String value) {
         switch (by) {
             case "tag":
                 return new ResponseEntity<>(skinService.fetchAllSkinsByTag(value), HttpStatus.OK);

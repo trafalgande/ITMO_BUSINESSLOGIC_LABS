@@ -47,7 +47,7 @@ public class AdminController {
 
     @GetMapping("/approve/{id}")
     public HttpStatus approveSkinById(@ApiParam("id") @PathVariable(name = "id") Long skinId) throws SkinException {
-        if (adminService.approve(skinId))
+        if (!adminService.approve(skinId))
             return HttpStatus.OK;
         else
             return HttpStatus.BAD_REQUEST;
@@ -55,7 +55,7 @@ public class AdminController {
 
     @GetMapping("/decline/{id}")
     public HttpStatus declineSkinById(@ApiParam("id") @PathVariable(name = "id") Long skinId) throws SkinException {
-        if (adminService.decline(skinId))
+        if (!adminService.decline(skinId))
             return HttpStatus.OK;
         else
             return HttpStatus.BAD_REQUEST;

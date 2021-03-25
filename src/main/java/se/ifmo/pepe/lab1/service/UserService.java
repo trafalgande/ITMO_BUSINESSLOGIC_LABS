@@ -52,6 +52,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).isPresent() ? userRepository.findById(id).get() : userRepository.findById(1L).get(); // if no user present -> belongs to super-user aka admin (id: 1)
     }
 
+    public User fetchUserByName(String name) {
+        return userRepository.findByUsername(name).isPresent() ? userRepository.findByUsername(name).get() : userRepository.findById(1L).get(); // if no user present -> belongs to super-user aka admin (id: 1)
+    }
+
     public ArrayList<CustomNotification> fetchAllNewNotificationsByUserId(Long userId) {
         ArrayList<CustomNotification> notifications = new ArrayList<>(notificationRepository.findAllByUserAndIsNew(fetchUserById(userId), true));
         for (CustomNotification n : notifications) {
