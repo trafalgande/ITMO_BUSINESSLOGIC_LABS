@@ -18,4 +18,7 @@ public class User implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne
+    private Wallet wallet;
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.pepe.lab1.model.CustomNotification;
 import se.ifmo.pepe.lab1.model.Skin;
@@ -71,23 +72,32 @@ public class ApiController {
         return null;
     }
 
-    @ApiOperation(value = "${ApiController.buySkin}")
+    /*@ApiOperation(value = "${ApiController.buySkin}")
     @GetMapping("/skins/buy/{skin_id}")
-    public HttpStatus buySkin(@ApiParam("skin_id") @PathVariable(name = "skin_id") Long skinId,
-                              @ApiParam("user_id") @RequestParam(name = "user_id") Long userId,
-                              @ApiParam("available") @RequestParam(name = "available") Double available) {
-        Skin desired = skinService.fetchSkinById(skinId);
-        if (available >= desired.getPrice()) {
-            notificationService.sendNotification(userId, String.format("You've successfully bought skin#%d", skinId));
-            return HttpStatus.OK;
-        } else {
-            notificationService.sendNotification(userId, String.format("You haven't bought skin#%d", skinId));
-            return HttpStatus.BAD_REQUEST;
-        }
+    public ResponseEntity<Skin> buySkin(@ApiParam("skin_id") @PathVariable(name = "skin_id") Long skinId,
+                                  @ApiParam("user_id") @RequestParam(name = "user_id") Long userId) {
+      *//*  Skin desired = skinService.fetchSkinById(skinId);
+        if (desired.getApproved())
+            if (available >= desired.getPrice()) {
+                notificationService.sendNotification(userId, String.format("You've successfully bought skin#%d", skinId));
+                return HttpStatus.OK;
+            } else {
+                notificationService.sendNotification(userId, String.format("You haven't bought skin#%d", skinId));
+                return HttpStatus.BAD_REQUEST;
+            }
+        else
+            return HttpStatus.BAD_REQUEST;*//*
 
-        /*
+        Skin desired = userService.purchaseSkin(userId, skinId);
+        System.out.println(desired);
+        if (desired != null)
+            return new ResponseEntity<>(desired, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        *//*
          * TODO: YOU SHOULD BE ABLE TO LOGIN AS USER, THEREFORE HAVING MONEY AND BEING ABLE TO BUY SKINS
          *  THUS, WITHDRAWING SHOULD BE IMPLEMENTED AS SOON AS REGISTRATION IMPLEMENTED
-         * */
-    }
+         * *//*
+    }*/
 }

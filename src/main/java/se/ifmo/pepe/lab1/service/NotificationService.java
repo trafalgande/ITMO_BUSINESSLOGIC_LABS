@@ -28,6 +28,7 @@ public class NotificationService {
     }
 
     public void sendNotification(Long userId, String message) {
+        if (userRepository.findById(userId).isPresent())
         createNotification(userRepository.findById(userId).get() , message);
     }
 
