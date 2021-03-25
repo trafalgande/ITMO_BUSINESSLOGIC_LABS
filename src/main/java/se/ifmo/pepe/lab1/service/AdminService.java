@@ -9,13 +9,11 @@ import se.ifmo.pepe.lab1.model.Skin;
 public class AdminService {
 
     private final SkinService skinService;
-    private final UserService userService;
     private final NotificationService notificationService;
 
     @Autowired
-    public AdminService(SkinService skinService, UserService userService, NotificationService notificationService) {
+    public AdminService(SkinService skinService, NotificationService notificationService) {
         this.skinService = skinService;
-        this.userService = userService;
         this.notificationService = notificationService;
     }
 

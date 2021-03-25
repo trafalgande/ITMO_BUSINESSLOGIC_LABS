@@ -20,15 +20,11 @@ import java.util.Optional;
 public class AdminController {
 
     private final SkinService skinService;
-    private final UserService userService;
-    private final NotificationService notificationService;
     private final AdminService adminService;
 
     @Autowired
-    public AdminController(SkinService skinService, UserService userService, NotificationService notificationService, AdminService adminService) {
+    public AdminController(SkinService skinService, AdminService adminService) {
         this.skinService = skinService;
-        this.userService = userService;
-        this.notificationService = notificationService;
         this.adminService = adminService;
     }
 
