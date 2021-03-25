@@ -12,16 +12,26 @@
     <artifactId>lab1</artifactId>
     <version>0.1</version>
     <name>lab1</name>
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
+        <deploy.jboss.host>127.0.0.1</deploy.jboss.host>
+        <deploy.jboss.port>18788</deploy.jboss.port>
+        <deploy.jboss.username>wildfly</deploy.jboss.username>
+        <deploy.jboss.password>wildfly</deploy.jboss.password>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -84,6 +94,26 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>2.0.2.Final</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filename>${project.build.finalName}.war</filename>
+                    <hostname>${deploy.jboss.host}</hostname>
+                    <port>${deploy.jboss.port}</port>
+                    <username>${deploy.jboss.username}</username>
+                    <password>${deploy.jboss.password}</password>
                 </configuration>
             </plugin>
         </plugins>
