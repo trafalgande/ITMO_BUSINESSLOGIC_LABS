@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/sudo")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final SkinService skinService;
@@ -32,24 +32,16 @@ public class AdminController {
 
 
     @GetMapping("/skins")
-    public ArrayList<Skin> findAllSkins(@ApiParam("username") @RequestParam(name = "u") String username,
-                                        @ApiParam("password") @RequestParam(name = "p") String password,
-                                        @ApiParam("approved") @RequestParam(name = "approved", required = false) Optional<Boolean> areApproved) {
-        if (username.equals("admin") && password.equals("admin"))
-            if (areApproved.isPresent())
-                return skinService.fetchAllApprovedSkins(areApproved.get());
-            else
-                return skinService.fetchAllSkins();
-        return null;
+    public ArrayList<Skin> findAllSkins(@ApiParam("approved") @RequestParam(name = "approved", required = false) Optional<Boolean> areApproved) {
+        if (areApproved.isPresent())
+            return skinService.fetchAllApprovedSkins(areApproved.get());
+        else
+            return skinService.fetchAllSkins();
     }
 
     @GetMapping(value = "/skin/{id}")
-    public Skin findSkinById(@ApiParam("username") @RequestParam(name = "u") String username,
-                             @ApiParam("password") @RequestParam(name = "p") String password,
-                             @ApiParam("id") @PathVariable(name = "id") Long skinId) {
-        if (username.equals("admin") && password.equals("admin"))
-            return skinService.fetchSkinById(skinId);
-        return null;
+    public Skin findSkinById(@ApiParam("id") @PathVariable(name = "id") Long skinId) {
+        return skinService.fetchSkinById(skinId);
     }
 
 
@@ -73,7 +65,7 @@ public class AdminController {
     /***
      * Use approveSkinById() or declineSkinById() instead
      * */
-    @Deprecated()
+    @Deprecated
     @GetMapping("/{action}/{id}")
     public HttpStatus resolveSkinById(@ApiParam("username") @RequestParam(name = "u") String username,
                                       @ApiParam("password") @RequestParam(name = "p") String password,
