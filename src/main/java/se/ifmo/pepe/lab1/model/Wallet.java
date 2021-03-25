@@ -17,7 +17,7 @@ public class Wallet implements Serializable {
     private Long id;
 
     @Column(name = "rub")
-    private Double rub = 0.d;
+    private Double rub = 666.d;
 
     public void withdraw(Double amount, Wallet target) throws PaymentException {
         if (this.rub >= amount) {

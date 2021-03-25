@@ -42,6 +42,11 @@ public class User implements Serializable, UserDetails {
         return this;
     }
 
+    public User setWallet(Wallet wallet) {
+        this.wallet = wallet;
+        return this;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

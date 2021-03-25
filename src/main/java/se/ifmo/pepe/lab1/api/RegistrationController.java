@@ -2,9 +2,11 @@ package se.ifmo.pepe.lab1.api;
 
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.pepe.lab1.model.Role;
 import se.ifmo.pepe.lab1.model.User;
+import se.ifmo.pepe.lab1.model.Wallet;
 import se.ifmo.pepe.lab1.service.RoleService;
 import se.ifmo.pepe.lab1.service.UserService;
 
@@ -39,11 +41,15 @@ public class RegistrationController {
 //    }
 
     @PostMapping("/signup")
-    public Boolean addUser(@ApiParam("username") @RequestParam(name = "username") String username,
-                           @ApiParam("password") @RequestParam(name = "password") String password) {
+    public HttpStatus addUser(@ApiParam("username") @RequestParam(name = "username") String username,
+                              @ApiParam("password") @RequestParam(name = "password") String password) {
         System.out.println(username + " " + password);
-        return userService.saveUser(new User()
+        if (userService.saveUser(new User()
                 .setUsername(username)
-                .setPassword(password));
+                .setPassword(password)
+                .setWallet(new Wallet())))
+            return HttpStatus.OK;
+        else
+            return HttpStatus.BAD_REQUEST;
     }
 }
