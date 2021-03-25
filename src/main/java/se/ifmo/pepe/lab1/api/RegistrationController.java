@@ -43,7 +43,6 @@ public class RegistrationController {
     @PostMapping("/signup")
     public HttpStatus addUser(@ApiParam("username") @RequestParam(name = "username") String username,
                               @ApiParam("password") @RequestParam(name = "password") String password) {
-        System.out.println(username + " " + password);
         if (userService.saveUser(new User()
                 .setUsername(username)
                 .setPassword(password)

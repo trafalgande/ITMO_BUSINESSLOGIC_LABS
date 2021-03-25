@@ -25,9 +25,10 @@ public class AdminService {
     }
 
     public void approve(Long skinId) {
-        Skin skin = skinService.saveSkin(skinService.fetchSkinById(skinId).setApproved(true));
+        Skin skinToApprove = skinService.fetchSkinById(skinId).setApproved(true);
+       /* Skin skin = skinService.saveSkin();
         notificationService.sendNotification(skin.getUser().getId(),
-                String.format("Your skin#%d was approved! :)", skin.getId()));
+                String.format("Your skin#%d was approved! :)", skin.getId()));*/
     }
 
 }

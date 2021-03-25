@@ -82,7 +82,6 @@ public class ApiController {
         try {
             desired = userService.purchaseSkin(userId, skinId);
         } catch (SkinException e) {
-            System.err.println(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
