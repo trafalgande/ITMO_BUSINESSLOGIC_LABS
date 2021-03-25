@@ -25,8 +25,10 @@ public class RegistrationController {
 
     @PostConstruct
     private void init() {
-        roleService.saveRole(new Role().setName("ROLE_USER"));
-        roleService.saveRole(new Role().setName("ROLE_ADMIN"));
+        String[] roles = {"ROLE_USER", "ROLE_ADMIN"};
+        for (String role : roles)
+            if (!roleService.fetchRoleByName(role).isPresent())
+                roleService.saveRole(new Role().setName(role));
     }
 
 

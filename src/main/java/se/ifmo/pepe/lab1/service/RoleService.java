@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import se.ifmo.pepe.lab1.model.Role;
 import se.ifmo.pepe.lab1.repository.RoleRepository;
 
+import java.util.Optional;
+
 @Service
 public class RoleService {
 
@@ -17,5 +19,10 @@ public class RoleService {
 
     public Role saveRole(Role role) {
         return roleRepository.save(role);
+    }
+
+
+    public Optional<Role> fetchRoleByName(String name) {
+        return roleRepository.findByName(name);
     }
 }
