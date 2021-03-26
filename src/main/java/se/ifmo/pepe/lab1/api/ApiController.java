@@ -1,6 +1,5 @@
 package se.ifmo.pepe.lab1.api;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import se.ifmo.pepe.lab1.exception.SkinException;
 import se.ifmo.pepe.lab1.model.CustomNotification;
 import se.ifmo.pepe.lab1.model.Skin;
-import se.ifmo.pepe.lab1.service.NotificationService;
 import se.ifmo.pepe.lab1.service.SkinService;
 import se.ifmo.pepe.lab1.service.UserService;
 
