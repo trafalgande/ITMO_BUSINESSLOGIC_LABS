@@ -12,32 +12,32 @@ public class AdminService {
 
     private final SkinService skinService;
     private final NotificationService notificationService;
-    private final PlatformTransactionManager txManager;
     private final TransactionTemplate template;
 
     @Autowired
-    public AdminService(SkinService skinService, NotificationService notificationService, PlatformTransactionManager txManager) {
+    public AdminService(SkinService skinService,
+                        NotificationService notificationService,
+                        PlatformTransactionManager txManager) {
         this.skinService = skinService;
         this.notificationService = notificationService;
-        this.txManager = txManager;
         this.template = new TransactionTemplate(txManager);
     }
 
     public Boolean decline(Long skinId) throws SkinException {
-        Skin skinToApprove = skinService.fetchSkinById(skinId) != null ? skinService.fetchSkinById(skinId) : null;
-        if (skinToApprove == null)
+        Skin skinToDecline = skinService.fetchSkinById(skinId);
+        if (skinToDecline == null)
             throw new SkinException("There's no such skin, mr.Admin");
 
         template.execute(transactionStatus -> {
             try {
-                skinToApprove.setApproved(true);
-                Skin skin = skinService.saveSkin(skinToApprove);
+                skinToDecline.setApproved(false);
+                Skin skin = skinService.saveSkin(skinToDecline);
                 notificationService.sendNotification(skin.getUser().getId(),
                         String.format("Your skin#%d was declined! :(", skin.getId()));
                 return true;
             } catch (Exception e) {
                 transactionStatus.setRollbackOnly();
-                notificationService.sendNotification(skinToApprove.getUser().getId(),
+                notificationService.sendNotification(skinToDecline.getUser().getId(),
                         "Something went wrong. Transaction has rolled back");
                 e.printStackTrace();
             }
@@ -47,7 +47,7 @@ public class AdminService {
     }
 
     public Boolean approve(Long skinId) throws SkinException {
-        Skin skinToApprove = skinService.fetchSkinById(skinId) != null ? skinService.fetchSkinById(skinId) : null;
+        Skin skinToApprove = skinService.fetchSkinById(skinId);
         if (skinToApprove == null)
             throw new SkinException("There's no such skin, mr.Admin");
 

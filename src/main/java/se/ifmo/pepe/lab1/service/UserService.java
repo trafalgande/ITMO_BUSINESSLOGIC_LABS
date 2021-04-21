@@ -28,7 +28,6 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final SkinRepository skinRepository;
-    private final PlatformTransactionManager txManager;
     private final TransactionTemplate template;
 
     @Autowired
@@ -44,8 +43,7 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
         this.skinRepository = skinRepository;
-        this.txManager = txManager;
-        this.template = new TransactionTemplate(this.txManager);
+        this.template = new TransactionTemplate(txManager);
     }
 
     public User fetchUserById(Long id) {

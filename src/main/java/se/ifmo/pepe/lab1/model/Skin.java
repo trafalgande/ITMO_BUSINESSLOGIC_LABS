@@ -41,7 +41,7 @@ public class Skin implements Serializable {
     @Column(name = "dl_url")
     private String dlUrl;
     @Column(name = "approved")
-    private Boolean approved = false;
+    private Boolean approved = null;
 
     /*
     * BUILDER SETTERS
