@@ -1,0 +1,6 @@
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    destination: blps_mq
+    pool:
+      enabled: false

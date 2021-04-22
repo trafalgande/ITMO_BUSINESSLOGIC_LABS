@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/blps
+    driver-class-name: org.postgresql.Driver
+    username: user
+    password: user
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  activemq:
+    broker-url: tcp://localhost:61616
+    destination: blps_mq
+    pool:
+      enabled: false
+
+server:
+  port: 18787

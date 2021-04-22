@@ -1,0 +1,10 @@
+PostgreSQL:
+  image: sameersbn/postgresql:10-2
+  ports:
+    - "5435:5432"
+  environment:
+    - DB_USER=user
+    - DB_PASS=user
+    - DB_NAME=blps
+  volumes:
+    - /srv/docker/postgresql:/var/lib/postgresql
