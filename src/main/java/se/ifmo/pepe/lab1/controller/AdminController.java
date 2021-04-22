@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import se.ifmo.pepe.lab1.exception.SkinException;
@@ -29,7 +30,6 @@ public class AdminController {
         this.skinService = skinService;
         this.adminService = adminService;
     }
-
 
     @GetMapping("/skins")
     public ArrayList<Skin> findAllSkins(@ApiParam("approved") @RequestParam(name = "approved", required = false) Optional<Boolean> areApproved) {
