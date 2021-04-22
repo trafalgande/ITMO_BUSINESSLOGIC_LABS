@@ -14,21 +14,16 @@ import javax.jms.Queue;
 @Configuration
 @EnableJms
 public class JmsConfiguration {
-    @Value("${spring.activemq.broker-url}")
-    private String brokerUrl;
-
-    @Value("${spring.activemq.destination}")
-    private String destination;
 
     @Bean
     public Queue queue() {
-        return new ActiveMQQueue(destination);
+        return new ActiveMQQueue("blps_mq");
     }
 
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory activeMQConnectionFactory =  new ActiveMQConnectionFactory();
-        activeMQConnectionFactory.setBrokerURL(brokerUrl);
+        activeMQConnectionFactory.setBrokerURL("tcp://localhost:61616");
         return activeMQConnectionFactory;
     }
 

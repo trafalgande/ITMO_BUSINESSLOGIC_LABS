@@ -11,10 +11,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   activemq:
-    broker-url: tcp://localhost:61616
-    destination: blps_mq
-    pool:
-      enabled: false
-
+    password: lmao
+    user: lmao
 server:
   port: 18787

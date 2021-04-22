@@ -29,14 +29,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf()
                     .disable()
-                .authorizeRequests()
+                    .authorizeRequests()
                     .antMatchers("/signup").permitAll()
-                    .antMatchers("/admin/**", "/standalone/**").hasRole("ADMIN")
+                    .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/api/**").hasAnyRole("ADMIN", "USER")
                     .antMatchers("/", "/resources/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
-                   .httpBasic();
+                    .httpBasic()
+                .and()
+                    .headers()
+                    .frameOptions().sameOrigin();
     }
 
     @Autowired
