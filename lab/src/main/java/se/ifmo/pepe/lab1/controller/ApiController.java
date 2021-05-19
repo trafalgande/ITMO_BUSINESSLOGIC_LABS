@@ -13,6 +13,7 @@ import se.ifmo.pepe.lab1.service.SkinService;
 import se.ifmo.pepe.lab1.service.UserService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -29,7 +30,7 @@ public class ApiController {
     }
 
     @GetMapping("/notifications")
-    public ResponseEntity<ArrayList<CustomNotification>> findAllNewNotifications(
+    public ResponseEntity<List<CustomNotification>> findAllNewNotifications(
             Authentication authentication) {
         Long userId = userService.fetchUserByName(authentication.getName()).getId();
         return new ResponseEntity<>(userService.fetchAllNewNotificationsByUserId(userId), HttpStatus.OK);

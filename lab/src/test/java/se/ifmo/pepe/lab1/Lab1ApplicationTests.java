@@ -24,21 +24,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 class Lab1ApplicationTests {
 
-    private MockMvc mockMvc;
+//    private MockMvc mockMvc;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    @Before
+ /*   @Before
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
+    }*/
 
     @Test
     void contextLoads() {
     }
 
-    @Test
+   /* @Test
     @SneakyThrows(Exception.class)
     public void test() {
         mockMvc.perform(post("")
@@ -47,5 +47,5 @@ class Lab1ApplicationTests {
                .andDo(print())
                .andExpect(status().isOk());
 
-    }
+    }*/
 }

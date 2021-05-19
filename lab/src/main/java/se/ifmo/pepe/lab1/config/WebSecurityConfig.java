@@ -5,18 +5,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import se.ifmo.pepe.lab1.service.UserService;
+import se.ifmo.pepe.lab1.service.Impl.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public WebSecurityConfig(UserService userService) {
-        this.userService = userService;
+    public WebSecurityConfig(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Bean
@@ -28,22 +29,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf()
-                    .disable()
-                    .authorizeRequests()
-                    .antMatchers("/signup").permitAll()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/api/**").hasAnyRole("ADMIN", "USER")
-                    .antMatchers("/", "/resources/**").permitAll()
-                    .anyRequest().authenticated()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/", "/resources/**", "/webjars/**").permitAll()
+
+                .antMatchers("/signup").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/notification").permitAll()
+
+                .anyRequest().authenticated()
                 .and()
-                    .httpBasic()
+                .httpBasic()
                 .and()
-                    .headers()
-                    .frameOptions().sameOrigin();
+                .headers()
+                .frameOptions().sameOrigin();
     }
 
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userServiceImpl).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    @Override
+    public void configure(WebSecurity webSecurity) {
+        webSecurity.ignoring().antMatchers("/webjars/**");
     }
 }

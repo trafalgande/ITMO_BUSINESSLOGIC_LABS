@@ -11,7 +11,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.util.Scanner;
 
 public class StompClient {
-    private static String URL = "ws://localhost:18787/notification";
+    private static String URL = "ws://localhost:18787/app/notification";
 
     public static void main(String[] args) {
         WebSocketClient client = new StandardWebSocketClient();
@@ -20,7 +20,6 @@ public class StompClient {
         StompHeaders stompHeaders = new StompHeaders();
         stompHeaders.add("login", "lmao");
         stompHeaders.add("passcode", "lmao");
-        stompHeaders.add("Authorization", "Basic bG1hbzpsbWFv");
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSessionHandler sessionHandler = new CustomStompSessionHandler();

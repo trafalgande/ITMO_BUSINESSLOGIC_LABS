@@ -36,10 +36,13 @@ public class RegistrationController {
     @PostMapping("/signup")
     public HttpStatus addUser(@ApiParam("username") @RequestParam(name = "username") String username,
                               @ApiParam("password") @RequestParam(name = "password") String password) {
-        if (userService.saveUser(new User()
-                .setUsername(username)
-                .setPassword(password)
-                .setWallet(new Wallet())))
+        if (userService.saveUser(User
+                .builder()
+                .username(username)
+                .password(password)
+                .skinCounter(0L)
+                .wallet(new Wallet())
+                .build()))
             return HttpStatus.OK;
         else
             return HttpStatus.BAD_REQUEST;

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YO</title>
+    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+    <script th:src="@{/webjars/sockjs-client/1.5.1/sockjs.min.js}"></script>
+    <script th:src="@{/webjars/stomp-websocket/2.3.4/stomp.min.js}"></script>
+    <link th:href="@{/webjars/bootstrap/5.0.1/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/js/client.js}"></script>
+</head>
+<body>
+<div class="container-fluid mt-lg-5 text-center" style="width: 60%; height: 60%;">
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-success btn-connect">CONNECT</button>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="mt-3">Authors</h3>
+        <div class="col-6" th:each="author : ${authors}">
+            <span class="text-black-50" th:text="'Username: ' + ${author.username}"></span>
+            <br>
+            <div>
+                <button class="btn btn-secondary btn-subscribe" th:id="${author.username}" onclick="toggleSubscription(this.id)">SUB</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="message-container">
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
