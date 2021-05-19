@@ -12,8 +12,12 @@
 <body>
 <div class="container-fluid mt-lg-5 text-center" style="width: 60%; height: 60%;">
     <div class="row">
-        <div class="col">
-            <button class="btn btn-success btn-connect">CONNECT</button>
+        <div class="col form-group">
+            <form id="form_">
+                <input style="width: 20%;" type="text" id="username" placeholder="Username">
+                <input style="width: 20%;" type="password" id="password" placeholder="Password">
+                <button class="btn btn-success btn-connect">CONNECT</button>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -22,14 +26,12 @@
             <span class="text-black-50" th:text="'Username: ' + ${author.username}"></span>
             <br>
             <div>
-                <button class="btn btn-secondary btn-subscribe" th:id="${author.username}" onclick="toggleSubscription(this.id)">SUB</button>
+                <button class="btn btn-secondary btn-sub" th:id="${author.username}">SUB</button>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="message-container">
-
-        </div>
+        <div class="message-container"></div>
     </div>
 </div>
 

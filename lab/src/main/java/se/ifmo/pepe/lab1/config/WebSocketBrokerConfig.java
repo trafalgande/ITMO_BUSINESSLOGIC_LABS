@@ -20,11 +20,7 @@ public class WebSocketBrokerConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config
-                .enableStompBrokerRelay("/topic")
-                .setRelayHost("localhost")
-                .setRelayPort(61613)
-                .setClientLogin("admin")
-                .setClientPasscode("admin");
+                .enableStompBrokerRelay("/topic");
         config.setApplicationDestinationPrefixes("/app");
     }
 }

@@ -11,6 +11,9 @@ import se.ifmo.pepe.lab1.service.AdminService;
 import se.ifmo.pepe.lab1.service.NotificationService;
 import se.ifmo.pepe.lab1.service.SkinService;
 
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
+
 @Slf4j
 @Service
 public class AdminServiceImpl implements AdminService {

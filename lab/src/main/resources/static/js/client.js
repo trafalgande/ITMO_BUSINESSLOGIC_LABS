@@ -1,57 +1,54 @@
 let stompClient = null;
 let subMap = new Map();
 
-const connect = () => {
-    let socket = new SockJS('/notification')
-    stompClient = Stomp.over(socket)
-    stompClient.connect({"Authorization": "Basic bG1hbzpsbWFv"})
-}
-
-const disconnect = () => {
-    if (stompClient !== null) {
-        stompClient.disconnect()
+const toggleConnection = (e, username, password) => {
+    let btn = $(e.target)
+    if (btn.text() === 'CONNECT') {
+        let socket = new SockJS('/notification')
+        stompClient = Stomp.over(socket)
+        stompClient.connect({"Authorization": "Basic " + btoa(`${username}:${password}`)})
+        btn.text('DISCONNECT')
+        btn.attr('class', 'btn btn-danger btn-connect')
+    } else {
+        if (stompClient !== null) {
+            stompClient.disconnect()
+        }
+        btn.text('CONNECT')
+        btn.attr('class', 'btn btn-success btn-connect')
     }
 }
 
-const toggleSubscription = (username) => {
-    let btn = $(event.target)
+const toggleSubscription = (e, username) => {
+    let btn = $(`#${username}`)
     if (btn.text() === 'SUB') {
         let sub = stompClient.subscribe(`/topic/notification.${username}`, (message) => {
+
             $('.message-container').append(
                 '<span class=\'label label-important\'>' + JSON.parse(JSON.stringify(message.body)) + '</span>' +
                 '<br>'
             )
         })
         subMap.set(username, sub)
-
-        btn.attr('class', 'btn btn-danger btn-subscribe')
+        btn.attr('class', 'btn btn-danger btn-sub')
         btn.text('UNSUB')
     } else {
         subMap.get(username).unsubscribe()
-        btn.attr('class', 'btn btn-secondary btn-subscribe')
-        btn.text('UNSUB')
+        subMap.delete(username)
+        btn.attr('class', 'btn btn-secondary btn-sub')
+        btn.text('SUB')
     }
 }
 
-const btnInitialisation = () => {
-    $('.btn-connect').on('click', () => {
-        let btn = $('.btn-connect')
-        if (btn.text() === 'CONNECT') {
-            connect()
-            btn.text('DISCONNECT')
-            btn.attr('class', 'btn btn-danger btn-connect')
-        } else {
-            disconnect()
-            btn.text('CONNECT')
-            btn.attr('class', 'btn btn-success btn-connect')
-        }
+$(() => {
+    $('#form_').submit((e) => {
+        e.preventDefault()
     })
 
+    $('.btn-connect').on('click', (e) => {
+        toggleConnection(e, $('#username').val(), $('#password').val())
+    })
 
-}
-
-// init
-$(() => {
-    btnInitialisation()
-
-});
+    $('.btn-sub').on('click', (e) => {
+        toggleSubscription(e, e.target.id)
+    })
+})
